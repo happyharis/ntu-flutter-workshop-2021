@@ -25,17 +25,34 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  bool? chosenAnswer;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(children: <Widget>[
-        QuizBody(),
+        QuizBody(chosenAnswer: chosenAnswer),
         Expanded(
           flex: 1,
           child: Row(
             children: [
-              AnswerButton(text: 'True', color: Colors.green),
-              AnswerButton(text: 'False', color: Colors.red),
+              AnswerButton(
+                text: 'True',
+                color: Colors.green,
+                onTap: () {
+                  setState(() {
+                    chosenAnswer = true;
+                  });
+                },
+              ),
+              AnswerButton(
+                text: 'False',
+                color: Colors.red,
+                onTap: () {
+                  setState(() {
+                    chosenAnswer = false;
+                  });
+                },
+              ),
             ],
           ),
         ),
@@ -47,11 +64,13 @@ class _QuizPageState extends State<QuizPage> {
 class AnswerButton extends StatelessWidget {
   final String text;
   final Color color;
+  final VoidCallback onTap;
 
   const AnswerButton({
     Key? key,
     required this.text,
     required this.color,
+    required this.onTap,
   }) : super(key: key);
 
   @override
@@ -60,7 +79,7 @@ class AnswerButton extends StatelessWidget {
       child: Ink(
         color: color,
         child: InkWell(
-          onTap: () {},
+          onTap: onTap,
           child: Center(
             child: Text(
               text,
@@ -78,13 +97,17 @@ class AnswerButton extends StatelessWidget {
 }
 
 class QuizBody extends StatelessWidget {
+  final bool? chosenAnswer;
   const QuizBody({
     Key? key,
+    this.chosenAnswer,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final youChoseText = "You chose $chosenAnswer. ";
+    final haveChosenAnswer = chosenAnswer != null;
     return Expanded(
       flex: 8,
       child: Container(
@@ -111,6 +134,15 @@ class QuizBody extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            SizedBox(height: 5),
+            if (haveChosenAnswer)
+              Text(
+                youChoseText,
+                style: TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
           ],
         ),
       ),
