@@ -26,11 +26,16 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   bool? chosenAnswer;
+  int currentQuestionIndex = 0;
   @override
   Widget build(BuildContext context) {
+    final Question currentQuestion = questions[currentQuestionIndex];
     return Scaffold(
       body: Column(children: <Widget>[
-        QuizBody(chosenAnswer: chosenAnswer),
+        QuizBody(
+          question: currentQuestion,
+          chosenAnswer: chosenAnswer,
+        ),
         Expanded(
           flex: 1,
           child: Row(
@@ -98,9 +103,11 @@ class AnswerButton extends StatelessWidget {
 
 class QuizBody extends StatelessWidget {
   final bool? chosenAnswer;
+  final Question question;
   const QuizBody({
     Key? key,
     this.chosenAnswer,
+    required this.question,
   }) : super(key: key);
 
   @override
@@ -119,7 +126,7 @@ class QuizBody extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              "Question #1",
+              "Question #${question.id}",
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
@@ -128,7 +135,7 @@ class QuizBody extends StatelessWidget {
             ),
             SizedBox(height: 5),
             Text(
-              'Haris is handsome.',
+              question.text,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -149,3 +156,17 @@ class QuizBody extends StatelessWidget {
     );
   }
 }
+
+class Question {
+  final int id;
+  final String text;
+  final bool answer;
+
+  Question({required this.id, required this.text, required this.answer});
+}
+
+final questions = [
+  Question(id: 1, text: 'Haris is handsome.', answer: true),
+  Question(id: 2, text: 'Flutter is easy.', answer: false),
+  Question(id: 3, text: "I'm hungry", answer: true),
+];
