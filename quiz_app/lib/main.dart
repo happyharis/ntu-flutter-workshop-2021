@@ -30,8 +30,49 @@ class _QuizPageState extends State<QuizPage> {
     return Scaffold(
       body: Column(children: <Widget>[
         QuizBody(),
-        Expanded(flex: 1, child: Container(color: Colors.amber)),
+        Expanded(
+          flex: 1,
+          child: Row(
+            children: [
+              AnswerButton(text: 'True', color: Colors.green),
+              AnswerButton(text: 'False', color: Colors.red),
+            ],
+          ),
+        ),
       ]),
+    );
+  }
+}
+
+class AnswerButton extends StatelessWidget {
+  final String text;
+  final Color color;
+
+  const AnswerButton({
+    Key? key,
+    required this.text,
+    required this.color,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Ink(
+        color: color,
+        child: InkWell(
+          onTap: () {},
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
