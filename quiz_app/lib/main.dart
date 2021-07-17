@@ -115,6 +115,9 @@ class QuizBody extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final youChoseText = "You chose $chosenAnswer. ";
     final haveChosenAnswer = chosenAnswer != null;
+    final isCorrect = haveChosenAnswer && chosenAnswer == question.answer;
+    final resultText = isCorrect ? "Correct!" : "Wrong!";
+    final resultColor = isCorrect ? Colors.green : Colors.red;
     return Expanded(
       flex: 8,
       child: Container(
@@ -144,10 +147,11 @@ class QuizBody extends StatelessWidget {
             SizedBox(height: 5),
             if (haveChosenAnswer)
               Text(
-                youChoseText,
+                youChoseText + resultText,
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
+                  color: resultColor,
                 ),
               ),
           ],
