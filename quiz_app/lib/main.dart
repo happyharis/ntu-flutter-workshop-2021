@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quiz_app/answer.dart';
 
 void main() {
   runApp(MyApp());
@@ -13,6 +14,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.indigo,
       ),
       home: QuizPage(),
+      routes: {
+        'quiz': (context) => QuizPage(),
+      },
     );
   }
 }
@@ -28,9 +32,20 @@ class _QuizPageState extends State<QuizPage> {
   bool? chosenAnswer;
   int currentQuestionIndex = 0;
   bool haveAnswered = false;
+  int points = 0;
+
+  void awardPoint(Question question) {
+    if (question.answer == chosenAnswer) {
+      setState(() {
+        points++;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Question currentQuestion = questions[currentQuestionIndex];
+    final isLastQuestion = currentQuestionIndex == questions.length - 1;
     return Scaffold(
       body: Column(children: <Widget>[
         QuizBody(
@@ -40,14 +55,25 @@ class _QuizPageState extends State<QuizPage> {
         if (haveAnswered)
           AnswerButton(
             color: Colors.grey.shade800,
+            text: isLastQuestion ? "Let's see your score" : 'Next Question',
             onTap: () {
-              setState(() {
-                currentQuestionIndex++;
-                haveAnswered = false;
-                chosenAnswer = null;
-              });
+              if (!isLastQuestion) {
+                setState(() {
+                  currentQuestionIndex++;
+                  haveAnswered = false;
+                  chosenAnswer = null;
+                });
+              } else {
+                Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(
+                  builder: (context) {
+                    return ScoreScreen(
+                      questionsAnswered: questions.length,
+                      points: points,
+                    );
+                  },
+                ), (route) => false);
+              }
             },
-            text: 'Next Question',
           ),
         if (!haveAnswered)
           Expanded(
@@ -61,6 +87,7 @@ class _QuizPageState extends State<QuizPage> {
                     setState(() {
                       chosenAnswer = true;
                       haveAnswered = true;
+                      awardPoint(currentQuestion);
                     });
                   },
                 ),
@@ -71,6 +98,7 @@ class _QuizPageState extends State<QuizPage> {
                     setState(() {
                       chosenAnswer = false;
                       haveAnswered = true;
+                      awardPoint(currentQuestion);
                     });
                   },
                 ),
@@ -78,6 +106,63 @@ class _QuizPageState extends State<QuizPage> {
             ),
           ),
       ]),
+    );
+  }
+}
+
+class ScoreScreen extends StatelessWidget {
+  final int questionsAnswered;
+  final int points;
+  const ScoreScreen({
+    required this.questionsAnswered,
+    required this.points,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Scaffold(
+      body: Container(
+        width: screenWidth,
+        child: Column(
+          children: [
+            Expanded(
+              flex: 8,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Congratulations!",
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    "You got $points out $questionsAnswered answers correct.",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            AnswerButton(
+              onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                'quiz',
+                (route) => false,
+              ),
+              text: 'Play again!',
+              color: Colors.indigo,
+            )
+          ],
+        ),
+      ),
     );
   }
 }
