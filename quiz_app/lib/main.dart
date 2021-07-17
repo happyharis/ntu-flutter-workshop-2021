@@ -27,6 +27,7 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   bool? chosenAnswer;
   int currentQuestionIndex = 0;
+  bool haveAnswered = false;
   @override
   Widget build(BuildContext context) {
     final Question currentQuestion = questions[currentQuestionIndex];
@@ -36,31 +37,40 @@ class _QuizPageState extends State<QuizPage> {
           question: currentQuestion,
           chosenAnswer: chosenAnswer,
         ),
-        Expanded(
-          flex: 1,
-          child: Row(
-            children: [
-              AnswerButton(
-                text: 'True',
-                color: Colors.green,
-                onTap: () {
-                  setState(() {
-                    chosenAnswer = true;
-                  });
-                },
-              ),
-              AnswerButton(
-                text: 'False',
-                color: Colors.red,
-                onTap: () {
-                  setState(() {
-                    chosenAnswer = false;
-                  });
-                },
-              ),
-            ],
+        if (haveAnswered)
+          AnswerButton(
+            color: Colors.grey.shade800,
+            onTap: () {},
+            text: 'Next Question',
           ),
-        ),
+        if (!haveAnswered)
+          Expanded(
+            flex: 1,
+            child: Row(
+              children: [
+                AnswerButton(
+                  text: 'True',
+                  color: Colors.green,
+                  onTap: () {
+                    setState(() {
+                      chosenAnswer = true;
+                      haveAnswered = true;
+                    });
+                  },
+                ),
+                AnswerButton(
+                  text: 'False',
+                  color: Colors.red,
+                  onTap: () {
+                    setState(() {
+                      chosenAnswer = false;
+                      haveAnswered = true;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
       ]),
     );
   }
