@@ -40,7 +40,13 @@ class _QuizPageState extends State<QuizPage> {
         if (haveAnswered)
           AnswerButton(
             color: Colors.grey.shade800,
-            onTap: () {},
+            onTap: () {
+              setState(() {
+                currentQuestionIndex++;
+                haveAnswered = false;
+                chosenAnswer = null;
+              });
+            },
             text: 'Next Question',
           ),
         if (!haveAnswered)
