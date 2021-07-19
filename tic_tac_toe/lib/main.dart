@@ -114,7 +114,15 @@ class _TicTacToeState extends State<TicTacToe> {
             ),
             SizedBox(height: 20),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                if (haveWinner) {
+                  setState(() {
+                    tiles.setAll(0, List.generate(9, (index) => ''));
+                    isPlayerTurn = true;
+                    winner = null;
+                  });
+                }
+              },
               child: Text(
                 playButtonText().toUpperCase(),
                 textAlign: TextAlign.center,
