@@ -60,26 +60,48 @@ class _TicTacToeState extends State<TicTacToe> {
     final haveWinner = winner != null;
     return Scaffold(
       body: Center(
-        child: GridView.count(
-          shrinkWrap: true,
-          crossAxisCount: 3,
-          physics: NeverScrollableScrollPhysics(),
-          children: List.generate(
-            tiles.length,
-            (index) => OutlinedButton(
-              onPressed: () {
-                if (tiles[index].isNotEmpty || haveWinner) return;
-                setState(() {
-                  tiles[index] = isPlayerTurn ? 'X' : 'O';
-                  checkWinner();
-                  isPlayerTurn = !isPlayerTurn;
-                });
-              },
-              child: Text(
-                haveWinner ? 'Winner is $winner' : tiles[index],
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Tic - Tac - Toe',
+              style: Theme.of(context).textTheme.headline2!.copyWith(
+                    fontFamily: 'Franchise',
+                  ),
+            ),
+            GridView.count(
+              shrinkWrap: true,
+              crossAxisCount: 3,
+              physics: NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.all(15),
+              children: List.generate(
+                tiles.length,
+                (index) => OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    primary: Colors.primaries[index],
+                    side: BorderSide(width: 2, color: Colors.black),
+                    shape: BeveledRectangleBorder(),
+                  ),
+                  child: Text(
+                    haveWinner ? 'Winner is $winner' : tiles[index],
+                    style: TextStyle(
+                      fontSize: 110,
+                      height: 1.1,
+                      fontFamily: 'Franchise',
+                    ),
+                  ),
+                  onPressed: () {
+                    if (tiles[index].isNotEmpty || haveWinner) return;
+                    setState(() {
+                      tiles[index] = isPlayerTurn ? 'X' : 'O';
+                      checkWinner();
+                      isPlayerTurn = !isPlayerTurn;
+                    });
+                  },
+                ),
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
