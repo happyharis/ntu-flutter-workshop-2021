@@ -58,6 +58,17 @@ class _TicTacToeState extends State<TicTacToe> {
   @override
   Widget build(BuildContext context) {
     final haveWinner = winner != null;
+    final haveStarted = !tiles.every((element) => element == '');
+    String playButtonText() {
+      if (!haveStarted) {
+        return startText;
+      } else if (haveWinner) {
+        return gameOverText(winner);
+      } else {
+        return isPlayerTurn ? yourTurnText : opponentTurnText;
+      }
+    }
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -83,7 +94,7 @@ class _TicTacToeState extends State<TicTacToe> {
                     shape: BeveledRectangleBorder(),
                   ),
                   child: Text(
-                    haveWinner ? 'Winner is $winner' : tiles[index],
+                    haveWinner ? winner! : tiles[index],
                     style: TextStyle(
                       fontSize: 110,
                       height: 1.1,
@@ -101,9 +112,31 @@ class _TicTacToeState extends State<TicTacToe> {
                 ),
               ),
             ),
+            SizedBox(height: 20),
+            TextButton(
+              onPressed: () {},
+              child: Text(
+                playButtonText().toUpperCase(),
+                textAlign: TextAlign.center,
+              ),
+              style: TextButton.styleFrom(
+                primary: Colors.black,
+                textStyle: TextStyle(
+                  fontFamily: 'PressStart',
+                  fontSize: 15,
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
+}
+
+final startText = "Press any box to start";
+final yourTurnText = "Your turn";
+final opponentTurnText = "Opponent's turn";
+String gameOverText(String? winner) {
+  return "Winner is $winner.\n \n Press here to play again";
 }
