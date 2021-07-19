@@ -26,6 +26,9 @@ class TicTacToe extends StatefulWidget {
 }
 
 class _TicTacToeState extends State<TicTacToe> {
+  bool isPlayerTurn = true;
+  final tiles = List.generate(9, (_) => '');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,10 +38,15 @@ class _TicTacToeState extends State<TicTacToe> {
           crossAxisCount: 3,
           physics: NeverScrollableScrollPhysics(),
           children: List.generate(
-            9,
+            tiles.length,
             (index) => OutlinedButton(
-              onPressed: () {},
-              child: Text('X'),
+              onPressed: () {
+                setState(() {
+                  tiles[index] = isPlayerTurn ? 'X' : 'O';
+                  isPlayerTurn = !isPlayerTurn;
+                });
+              },
+              child: Text(tiles[index]),
             ),
           ),
         ),
