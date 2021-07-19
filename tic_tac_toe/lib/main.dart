@@ -29,8 +29,35 @@ class _TicTacToeState extends State<TicTacToe> {
   bool isPlayerTurn = true;
   final tiles = List.generate(9, (_) => '');
 
+  final winningTiles = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  String? winner;
+  void checkWinner() {
+    for (var answerIndexes in winningTiles) {
+      final first = tiles[answerIndexes.first];
+      final middle = tiles[answerIndexes[1]];
+      final last = tiles[answerIndexes.last];
+      if (first == middle &&
+          middle == last &&
+          first == last &&
+          first.isNotEmpty) {
+        setState(() => winner = isPlayerTurn ? 'X' : 'O');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final haveWinner = winner != null;
     return Scaffold(
       body: Center(
         child: GridView.count(
@@ -41,12 +68,16 @@ class _TicTacToeState extends State<TicTacToe> {
             tiles.length,
             (index) => OutlinedButton(
               onPressed: () {
+                if (tiles[index].isNotEmpty || haveWinner) return;
                 setState(() {
                   tiles[index] = isPlayerTurn ? 'X' : 'O';
+                  checkWinner();
                   isPlayerTurn = !isPlayerTurn;
                 });
               },
-              child: Text(tiles[index]),
+              child: Text(
+                haveWinner ? 'Winner is $winner' : tiles[index],
+              ),
             ),
           ),
         ),
