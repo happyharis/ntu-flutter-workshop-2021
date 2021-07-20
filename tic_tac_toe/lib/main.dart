@@ -1,6 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
-// import 'answer.dart';
 void main() {
   runApp(MyApp());
 }
@@ -55,6 +56,18 @@ class _TicTacToeState extends State<TicTacToe> {
     }
   }
 
+  void opponentPlays() {
+    final index = Random().nextInt(9);
+    if (tiles[index].isEmpty) {
+      setState(() {
+        tiles[index] = '0';
+        isPlayerTurn = !isPlayerTurn;
+      });
+    } else {
+      opponentPlays();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final haveWinner = winner != null;
@@ -104,10 +117,11 @@ class _TicTacToeState extends State<TicTacToe> {
                   onPressed: () {
                     if (tiles[index].isNotEmpty || haveWinner) return;
                     setState(() {
-                      tiles[index] = isPlayerTurn ? 'X' : 'O';
+                      tiles[index] = 'X';
                       checkWinner();
                       isPlayerTurn = !isPlayerTurn;
                     });
+                    opponentPlays();
                   },
                 ),
               ),
