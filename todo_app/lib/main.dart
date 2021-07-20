@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'add_screen.dart';
 
 void main() {
   runApp(TodoApp());
@@ -11,6 +12,9 @@ class TodoApp extends StatelessWidget {
       title: 'Todo App',
       theme: ThemeData(primarySwatch: Colors.yellow),
       home: HomeScreen(),
+      routes: {
+        'add': (_) => AddScreen(),
+      },
     );
   }
 }
@@ -54,7 +58,7 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => Navigator.of(context).pushNamed('add'),
         child: Icon(Icons.add),
       ),
     );
