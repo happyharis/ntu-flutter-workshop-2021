@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/task_notifier.dart';
 import 'add_screen.dart';
 
 void main() {
@@ -8,13 +10,16 @@ void main() {
 class TodoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Todo App',
-      theme: ThemeData(primarySwatch: Colors.yellow),
-      home: HomeScreen(),
-      routes: {
-        'add': (_) => AddScreen(),
-      },
+    return ChangeNotifierProvider(
+      create: (context) => TaskNotifer(),
+      child: MaterialApp(
+        title: 'Todo App',
+        theme: ThemeData(primarySwatch: Colors.yellow),
+        home: HomeScreen(),
+        routes: {
+          'add': (_) => AddScreen(),
+        },
+      ),
     );
   }
 }
@@ -24,6 +29,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tasks = Provider.of<TaskNotifer>(context).tasks;
     return Scaffold(
       appBar: AppBar(title: Text('Todo App')),
       body: Padding(
@@ -78,13 +84,3 @@ class Task {
     required this.id,
   });
 }
-
-List<Task> tasks = [
-  Task(
-    title: 'Create todo app',
-    description: 'Listen to Haris not so boring lecture',
-    id: 1,
-  ),
-  Task(title: 'Eat', description: 'Lunch at MacDonalds', id: 2),
-  Task(title: 'Sleep', description: 'Knock out before 11pm', id: 3),
-];
