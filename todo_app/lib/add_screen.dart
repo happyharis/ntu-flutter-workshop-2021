@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'task_notifier.dart';
 
 class AddScreen extends StatelessWidget {
   const AddScreen({Key? key}) : super(key: key);
@@ -42,7 +45,13 @@ class AddScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         label: Text('Submit'),
         icon: Icon(Icons.send),
-        onPressed: () => Navigator.of(context).pop(),
+        onPressed: () {
+          final title = titleController.text;
+          final description = descriptionController.text;
+          Provider.of<TaskNotifer>(context, listen: false)
+              .addTask(title, description);
+          Navigator.of(context).pop();
+        },
       ),
     );
   }
