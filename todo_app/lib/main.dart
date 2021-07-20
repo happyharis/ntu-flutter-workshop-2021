@@ -24,27 +24,33 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(title: Text('Todo App')),
       body: Padding(
         padding: const EdgeInsets.all(18.0),
-        child: Card(
-          child: ListTile(
-            title: Text('Create todo app'),
-            leading: Checkbox(
-              value: false,
-              onChanged: (value) {},
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.edit),
+        child: ListView.builder(
+          itemCount: tasks.length,
+          itemBuilder: (context, index) {
+            final task = tasks[index];
+            return Card(
+              child: ListTile(
+                title: Text(task.title),
+                leading: Checkbox(
+                  value: false,
+                  onChanged: (value) {},
                 ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.delete),
-                )
-              ],
-            ),
-          ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.edit),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.delete),
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -54,3 +60,27 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
+class Task {
+  final String title;
+  final String description;
+  bool completed;
+  final int id;
+
+  Task({
+    required this.title,
+    required this.description,
+    this.completed = false,
+    required this.id,
+  });
+}
+
+List<Task> tasks = [
+  Task(
+    title: 'Create todo app',
+    description: 'Listen to Haris not so boring lecture',
+    id: 1,
+  ),
+  Task(title: 'Eat', description: 'Lunch at MacDonalds', id: 2),
+  Task(title: 'Sleep', description: 'Knock out before 11pm', id: 3),
+];
