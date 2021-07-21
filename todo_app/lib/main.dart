@@ -30,6 +30,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tasks = Provider.of<TaskNotifer>(context).tasks;
+    final deleteTask =
+        Provider.of<TaskNotifer>(context, listen: false).deleteTask;
     return Scaffold(
       appBar: AppBar(title: Text('Todo App')),
       body: Padding(
@@ -53,8 +55,25 @@ class HomeScreen extends StatelessWidget {
                       icon: Icon(Icons.edit),
                     ),
                     IconButton(
-                      onPressed: () {},
                       icon: Icon(Icons.delete),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: Text('Delete task: ${task.title}?'),
+                            content: Text('Deleted tasks cannot be recovered.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  deleteTask(task.id);
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('DELETE'),
+                              )
+                            ],
+                          ),
+                        );
+                      },
                     )
                   ],
                 ),
