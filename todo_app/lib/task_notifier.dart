@@ -21,4 +21,9 @@ class TaskNotifer extends ChangeNotifier {
     _tasks.removeAt(id - 1);
     notifyListeners();
   }
+
+  void updateTask(Task task) {
+    _tasks.setAll(task.id - 1, [task]);
+    notifyListeners();
+  }
 }

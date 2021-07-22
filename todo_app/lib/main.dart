@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/task_notifier.dart';
 import 'add_screen.dart';
+import 'update_screen.dart';
 
 void main() {
   runApp(TodoApp());
@@ -51,8 +52,16 @@ class HomeScreen extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      onPressed: () {},
                       icon: Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return UpdateScreen(task: task);
+                            },
+                          ),
+                        );
+                      },
                     ),
                     IconButton(
                       icon: Icon(Icons.delete),
@@ -102,4 +111,18 @@ class Task {
     this.completed = false,
     required this.id,
   });
+
+  Task copyWith({
+    String? title,
+    String? description,
+    bool? completed,
+    int? id,
+  }) {
+    return Task(
+      title: title ?? this.title,
+      description: description ?? this.description,
+      completed: completed ?? this.completed,
+      id: id ?? this.id,
+    );
+  }
 }
